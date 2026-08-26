@@ -1,16 +1,8 @@
-
 """
 Machine-learning prediction service.
 
-This module is responsible for:
-
-1. Loading the trained ambulance response-time model.
-2. Preparing prediction input.
-3. Generating a response-time prediction.
-
-The final trained model will be stored at:
-
-model/ambulance_response_model.joblib
+Loads the trained ambulance response-time model and
+generates response-time predictions.
 """
 
 import os
@@ -21,7 +13,16 @@ import joblib
 # MODEL CONFIGURATION
 # ============================================================
 
+# Get the directory containing this file:
+# bml-project/services/
+SERVICES_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Go up one level to the project root:
+PROJECT_DIR = os.path.dirname(SERVICES_DIR)
+
+# Build an absolute path to the model:
 MODEL_PATH = os.path.join(
+    PROJECT_DIR,
     "model",
     "ambulance_response_model.joblib"
 )
@@ -32,9 +33,6 @@ MODEL_PATH = os.path.join(
 # ============================================================
 
 class PredictionService:
-    """
-    Handles loading and using the ambulance response-time model.
-    """
 
     def __init__(self, model_path=MODEL_PATH):
         self.model_path = model_path
@@ -48,13 +46,6 @@ class PredictionService:
     # --------------------------------------------------------
 
     def _load_model(self):
-        """
-        Load the trained model from disk.
-
-        The model does not exist yet during development,
-        so the application should not crash if the file
-        is missing.
-        """
 
         if not os.path.exists(self.model_path):
             self.load_error = (
@@ -68,17 +59,15 @@ class PredictionService:
 
         except Exception as error:
             self.model = None
-            self.load_error = str(error)
+            self.load_error = (
+                f"Failed to load model: {error}"
+            )
 
     # --------------------------------------------------------
     # MODEL STATUS
     # --------------------------------------------------------
 
     def is_ready(self):
-        """
-        Return True if the model was successfully loaded.
-        """
-
         return self.model is not None
 
     # --------------------------------------------------------
@@ -86,25 +75,6 @@ class PredictionService:
     # --------------------------------------------------------
 
     def predict(self, features):
-        """
-        Generate an ambulance response-time prediction.
-
-        Parameters
-        ----------
-        features:
-            Data prepared in the exact format expected
-            by the trained model.
-
-        Returns
-        -------
-        float
-            Predicted response time in minutes.
-
-        Raises
-        ------
-        RuntimeError
-            If the model has not been loaded.
-        """
 
         if not self.is_ready():
             raise RuntimeError(
@@ -114,8 +84,6 @@ class PredictionService:
         try:
             prediction = self.model.predict(features)
 
-            # The model returns an array-like object.
-            # Convert the first prediction to a normal float.
             predicted_minutes = float(prediction[0])
 
             return predicted_minutes
@@ -131,4 +99,3 @@ class PredictionService:
 # ============================================================
 
 prediction_service = PredictionService()
-
