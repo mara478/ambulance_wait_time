@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SF Ambulance Response Time Predictor</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================== -->
+
+    <header>
+
+        <h1>
+            Ambulance Response Time Predictor
+        </h1>
+
+        <p class="subtitle">
+            Predict estimated emergency medical response times
+            using historical San Francisco emergency response
+            data from 2023–2026.
+        </p>
+
+    </header>
+
+
+    <!-- ================================================== -->
+    <!-- MAIN CONTENT -->
+    <!-- ================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- ================================================== -->
+        <!-- PREDICTION FORM -->
+        <!-- ================================================== -->
+
+        <section class="card form-card">
+
+            <h2>
+                Emergency Call Characteristics
+            </h2>
+
+
+            <form id="prediction-form">
+
+
+                <!-- ------------------------------------------ -->
+                <!-- TIME -->
+                <!-- ------------------------------------------ -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="hour">
+                            Hour of Day (0–23)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="hour"
+                            name="hour"
+                            min="0"
+                            max="23"
+                            value="14"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="day_of_week">
+                            Day of Week
+                        </label>
+
+                        <select
+                            id="day_of_week"
+                            name="day_of_week"
+                            required
+                        >
+
+                            <option value="Monday">
+                                Monday
+                            </option>
+
+                            <option
+                                value="Tuesday"
+                                selected
+                            >
+                                Tuesday
+                            </option>
+
+                            <option value="Wednesday">
+                                Wednesday
+                            </option>
+
+                            <option value="Thursday">
+                                Thursday
+                            </option>
+
+                            <option value="Friday">
+                                Friday
+                            </option>
+
+                            <option value="Saturday">
+                                Saturday
+                            </option>
+
+                            <option value="Sunday">
+                                Sunday
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ------------------------------------------ -->
+                <!-- PRIORITY + UNIT -->
+                <!-- ------------------------------------------ -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Priority Level
+                        </label>
+
+                        <select
+                            id="priority"
+                            name="priority"
+                            required
+                        >
+
+                            <option value="1">
+                                Priority 1 (Emergency)
+                            </option>
+
+                            <option
+                                value="2"
+                                selected
+                            >
+                                Priority 2 (Urgent)
+                            </option>
+
+                            <option value="3">
+                                Priority 3
+                            </option>
+
+                            <option value="E">
+                                Priority E
+                            </option>
+
+                            <option value="I">
+                                Priority I
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="unit_type">
+                            Unit Type
+                        </label>
+
+                        <select
+                            id="unit_type"
+                            name="unit_type"
+                            required
+                        >
+
+                            <option
+                                value="MEDIC"
+                                selected
+                            >
+                                MEDIC
+                            </option>
+
+                            <option value="PRIVATE">
+                                PRIVATE
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ------------------------------------------ -->
+                <!-- LOCATION -->
+                <!-- ------------------------------------------ -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="zipcode">
+                            ZIP Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="zipcode"
+                            name="zipcode"
+                            value="94107"
+                            placeholder="e.g. 94107"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="station_area">
+                            Station Area
+                        </label>
+
+                        <input
+                            type="text"
+                            id="station_area"
+                            name="station_area"
+                            value="01"
+                            placeholder="e.g. 01"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- ------------------------------------------ -->
+                <!-- NEIGHBORHOOD + ALS -->
+                <!-- ------------------------------------------ -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="neighborhood">
+                            Neighborhood
+                        </label>
+
+                        <input
+                            type="text"
+                            id="neighborhood"
+                            name="neighborhood"
+                            value="South of Market"
+                            placeholder="e.g. South of Market"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group checkbox-group">
+
+                        <label for="als_unit">
+
+                            <input
+                                type="checkbox"
+                                id="als_unit"
+                                name="als_unit"
+                                checked
+                            >
+
+                            Advanced Life Support (ALS) Unit
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ------------------------------------------ -->
+                <!-- SUBMIT -->
+                <!-- ------------------------------------------ -->
+
+                <button
+                    type="submit"
+                    id="submit-btn"
+                    class="btn"
+                >
+                    Predict Response Time
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================================================== -->
+        <!-- SIDEBAR -->
+        <!-- ================================================== -->
+
+        <div class="sidebar">
+
+
+            <!-- ---------------------------------------------- -->
+            <!-- RESULT -->
+            <!-- ---------------------------------------------- -->
+
+            <section
+                class="card result-card"
+                id="result-card"
+            >
+
+                <h2>
+                    Estimated Response Time
+                </h2>
+
+
+                <div
+                    class="result-display"
+                    id="result-display"
+                >
+
+                    <span class="placeholder-text">
+                        Enter call details and click predict.
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="error-message"
+                    class="error-message hidden"
+                ></div>
+
+            </section>
+
+
+
+            <!-- ---------------------------------------------- -->
+            <!-- MODEL INFORMATION -->
+            <!-- ---------------------------------------------- -->
+
+            <section class="card info-card">
+
+                <h3>
+                    Model Specifications
+                </h3>
+
+                <ul>
+
+                    <li>
+                        <strong>
+                            Dataset Period:
+                        </strong>
+
+                        2023–2026
+                    </li>
+
+
+                    <li>
+                        <strong>
+                            Training Records:
+                        </strong>
+
+                        Historical emergency-response records
+                    </li>
+
+
+                    <li>
+                        <strong>
+                            Primary Metric:
+                        </strong>
+
+                        Mean Absolute Error (MAE)
+                    </li>
+
+
+                    <li>
+                        <strong>
+                            Model:
+                        </strong>
+
+                        HistGradientBoostingRegressor
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ================================================== -->
+    <!-- DISCLAIMER -->
+    <!-- ================================================== -->
+
+    <footer>
+
+        <p class="disclaimer">
+
+            <strong>
+                Disclaimer:
+            </strong>
+
+            This application provides an estimate based on
+            historical emergency-response data.
+
+            It is not an emergency dispatch system and should
+            not be used to make real-time emergency decisions.
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+<!-- ====================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+</html>
