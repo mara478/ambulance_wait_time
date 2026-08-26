@@ -31,7 +31,7 @@ PROJECT_DIR = os.path.dirname(
 DATA_PATH = os.path.join(
     PROJECT_DIR,
     "data",
-    "medical_ambulance_2023_2026.csv",
+    "prediction_history.csv",
 )
 
 
