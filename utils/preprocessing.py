@@ -1,11 +1,9 @@
 """
-Preprocessing utilities for ambulance response-time prediction.
-
-The trained model expects 27 features. This module builds those
-features from the incoming request and historical training data.
+Preprocessing utilities using precomputed summary statistics.
 """
 
 import os
+import json
 import numpy as np
 import pandas as pd
 
@@ -24,26 +22,26 @@ VALID_DAYS_OF_WEEK = [
 ]
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(PROJECT_DIR, "data", "prediction_history.csv")
+STATS_PATH = os.path.join(PROJECT_DIR, "data", "summary_stats.json")
+
+_SUMMARY_STATS = None
 
 
-# ============================================================
-# VALIDATION
-# ============================================================
+def _get_summary_stats():
+    global _SUMMARY_STATS
+    if _SUMMARY_STATS is None:
+        if not os.path.exists(STATS_PATH):
+            raise FileNotFoundError(f"Precomputed stats file missing: {STATS_PATH}")
+        with open(STATS_PATH, "r") as f:
+            _SUMMARY_STATS = json.load(f)
+    return _SUMMARY_STATS
+
 
 def validate_prediction_input(data):
     if not isinstance(data, dict):
         return False, "Payload must be a valid JSON object."
 
-    required_fields = [
-        "hour",
-        "day_of_week",
-        "priority",
-        "unit_type",
-        "als_unit",
-        "zipcode",
-    ]
-
+    required_fields = ["hour", "day_of_week", "priority", "unit_type", "als_unit", "zipcode"]
     for field in required_fields:
         if field not in data or data[field] is None or data[field] == "":
             return False, f"Missing required field: '{field}'"
@@ -77,70 +75,6 @@ def validate_prediction_input(data):
     return True, None
 
 
-# ============================================================
-# HISTORICAL DATA (MEMORY EFFICIENT)
-# ============================================================
-
-def _load_historical_data():
-    """
-    Memory-optimized loader for Render free tier (512 MB limit).
-    Calculates summary lookup statistics instead of heavy expanding windows.
-    """
-    if not os.path.exists(DATA_PATH):
-        raise FileNotFoundError(f"Historical dataset not found: {DATA_PATH}")
-
-    use_cols = [
-        "received_dttm",
-        "response_dttm",
-        "station_area",
-        "neighborhoods_analysis_boundaries",
-        "zipcode_of_incident",
-    ]
-
-    df = pd.read_csv(DATA_PATH, usecols=use_cols, low_memory=False)
-
-    df["received_dttm"] = pd.to_datetime(df["received_dttm"], errors="coerce")
-    df["response_dttm"] = pd.to_datetime(df["response_dttm"], errors="coerce")
-
-    df["response_time_minutes"] = (
-        df["response_dttm"] - df["received_dttm"]
-    ).dt.total_seconds() / 60.0
-
-    df = df[
-        df["received_dttm"].notna()
-        & df["response_time_minutes"].notna()
-        & (df["response_time_minutes"] > 0)
-    ].copy()
-
-    df["hour"] = df["received_dttm"].dt.hour
-
-    categorical_cols = [
-        "station_area",
-        "neighborhoods_analysis_boundaries",
-        "zipcode_of_incident",
-    ]
-    for col in categorical_cols:
-        df[col] = df[col].astype(str).fillna("UNKNOWN").str.strip()
-
-    return df
-
-
-_HISTORICAL_DATA = None
-
-
-def _get_historical_data():
-    global _HISTORICAL_DATA
-    if _HISTORICAL_DATA is None:
-        print("Loading historical prediction data...")
-        _HISTORICAL_DATA = _load_historical_data()
-        print(f"Historical prediction data loaded: {len(_HISTORICAL_DATA):,} records.")
-    return _HISTORICAL_DATA
-
-
-# ============================================================
-# FEATURE PREPROCESSING
-# ============================================================
-
 def preprocess_features(raw_data):
     hour = int(raw_data["hour"])
     day_name = str(raw_data["day_of_week"]).capitalize()
@@ -161,7 +95,6 @@ def preprocess_features(raw_data):
     fire_prevention_district = str(raw_data.get("fire_prevention_district", "2")).strip()
     supervisor_district = str(raw_data.get("supervisor_district", "6")).strip()
 
-    # Time features
     minutes_since_midnight = hour * 60
     time_sin = np.sin(2 * np.pi * minutes_since_midnight / 1440)
     time_cos = np.cos(2 * np.pi * minutes_since_midnight / 1440)
@@ -170,30 +103,13 @@ def preprocess_features(raw_data):
     month = now.month
     day_of_month = now.day
 
-    # Historical features lookup
-    historical = _get_historical_data()
-    global_mean = historical["response_time_minutes"].mean()
+    stats = _get_summary_stats()
+    global_mean = stats["global_mean"]
 
-    station_rows = historical[historical["station_area"] == station_area]
-    neighborhood_rows = historical[
-        historical["neighborhoods_analysis_boundaries"] == neighborhood
-    ]
-    zip_rows = historical[historical["zipcode_of_incident"] == zipcode]
-    hour_rows = historical[historical["hour"] == hour]
-
-    station_hour_rows = historical[
-        (historical["station_area"] == station_area) & (historical["hour"] == hour)
-    ]
-    neighborhood_hour_rows = historical[
-        (historical["neighborhoods_analysis_boundaries"] == neighborhood)
-        & (historical["hour"] == hour)
-    ]
-
-    def mean_or_global(rows):
-        if len(rows) == 0:
-            return global_mean
-        val = rows["response_time_minutes"].mean()
-        return val if pd.notna(val) else global_mean
+    station_mean = stats["station_mean"].get(station_area, global_mean)
+    neighborhood_mean = stats["neighborhood_mean"].get(neighborhood, global_mean)
+    zip_mean = stats["zip_mean"].get(zipcode, global_mean)
+    hour_mean = stats["hour_mean"].get(str(hour), global_mean)
 
     features = {
         "priority": [priority],
@@ -214,15 +130,15 @@ def preprocess_features(raw_data):
         "time_cos": [time_cos],
         "als_unit": [als_unit],
         "historical_global_mean": [global_mean],
-        "historical_station_mean": [mean_or_global(station_rows)],
-        "historical_neighborhood_mean": [mean_or_global(neighborhood_rows)],
-        "historical_zip_mean": [mean_or_global(zip_rows)],
-        "historical_hour_mean": [mean_or_global(hour_rows)],
-        "historical_station_hour_mean": [mean_or_global(station_hour_rows)],
-        "historical_neighborhood_hour_mean": [mean_or_global(neighborhood_hour_rows)],
-        "historical_station_call_count": [len(station_rows)],
-        "historical_neighborhood_call_count": [len(neighborhood_rows)],
-        "historical_hour_call_count": [len(hour_rows)],
+        "historical_station_mean": [station_mean],
+        "historical_neighborhood_mean": [neighborhood_mean],
+        "historical_zip_mean": [zip_mean],
+        "historical_hour_mean": [hour_mean],
+        "historical_station_hour_mean": [station_mean],
+        "historical_neighborhood_hour_mean": [neighborhood_mean],
+        "historical_station_call_count": [100],
+        "historical_neighborhood_call_count": [100],
+        "historical_hour_call_count": [100],
     }
 
     return pd.DataFrame(features)
