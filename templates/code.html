@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_5 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_5" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_5');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_5');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  
+  const width = container.clientWidth || window.innerWidth;
+  const height = container.clientHeight || window.innerHeight;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // Group to hold all interactive objects
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // Create a medical-themed abstract core: a pulsing pulsing icosahedron
+  const coreGeometry = new THREE.IcosahedronGeometry(1.2, 2);
+  const coreMaterial = new THREE.MeshPhongMaterial({
+      color: 0x00d1ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.4,
+      shininess: 100
+  });
+  const core = new THREE.Mesh(coreGeometry, coreMaterial);
+  group.add(core);
+
+  // Solid inner core for better visibility
+  const innerCoreGeometry = new THREE.IcosahedronGeometry(0.6, 1);
+  const innerCoreMaterial = new THREE.MeshPhongMaterial({
+      color: 0x00d1ff,
+      transparent: true,
+      opacity: 0.2,
+      emissive: 0x00d1ff,
+      emissiveIntensity: 0.5
+  });
+  const innerCore = new THREE.Mesh(innerCoreGeometry, innerCoreMaterial);
+  group.add(innerCore);
+
+  // Add interactive "data points" floating around
+  const points = [];
+  const pointGeometry = new THREE.SphereGeometry(0.06, 12, 12);
+  const pointMaterialBase = new THREE.MeshPhongMaterial({ color: 0xffffff });
+
+  for (let i = 0; i < 45; i++) {
+      const point = new THREE.Mesh(pointGeometry, pointMaterialBase.clone());
+      const phi = Math.acos(-1 + (2 * i) / 45);
+      const theta = Math.sqrt(45 * Math.PI) * phi;
+      
+      point.position.setFromSphericalCoords(2.5, phi, theta);
+      point.userData = {
+          originalPosition: point.position.clone(),
+          velocity: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.01,
+              (Math.random() - 0.5) * 0.01,
+              (Math.random() - 0.5) * 0.01
+          ),
+          hoverScale: 1
+      };
+      group.add(point);
+      points.push(point);
+  }
+
+  // Lights
+  const light = new THREE.PointLight(0xffffff, 1.2, 100);
+  light.position.set(10, 10, 10);
+  scene.add(light);
+
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+  scene.add(ambientLight);
+
+  camera.position.z = 6;
+
+  // Interaction variables
+  const mouse = new THREE.Vector2();
+  const raycaster = new THREE.Raycaster();
+  let targetRotationX = 0;
+  let targetRotationY = 0;
+
+  window.addEventListener('mousemove', (event) => {
+      // Mouse coordinates for rotation
+      const rect = container.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / height) * 2 + 1;
+
+      targetRotationY = mouse.x * 0.5;
+      targetRotationX = -mouse.y * 0.5;
+  });
+
+  function animate() {
+      requestAnimationFrame(animate);
+      
+      // Smooth group rotation based on mouse
+      group.rotation.x += (targetRotationX - group.rotation.x) * 0.05;
+      group.rotation.y += (targetRotationY - group.rotation.y) * 0.05;
+      
+      // Base rotation for energy feel
+      core.rotation.y += 0.002;
+      innerCore.rotation.y -= 0.003;
+      
+      // Pulsing effect
+      const time = Date.now() * 0.002;
+      const pulse = 1 + Math.sin(time) * 0.1;
+      core.scale.set(pulse, pulse, pulse);
+      innerCore.scale.set(pulse * 0.8, pulse * 0.8, pulse * 0.8);
+
+      // Raycasting for point interactivity
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(points);
+
+      points.forEach(point => {
+          // Reset point state
+          point.material.color.set(0xffffff);
+          point.userData.hoverScale += (1 - point.userData.hoverScale) * 0.1;
+          
+          // Subtle floating movement
+          point.position.x = point.userData.originalPosition.x + Math.sin(time + point.position.y) * 0.1;
+          point.position.z = point.userData.originalPosition.z + Math.cos(time + point.position.x) * 0.1;
+      });
+
+      if (intersects.length > 0) {
+          const hovered = intersects[0].object;
+          hovered.material.color.set(0x00d1ff);
+          hovered.userData.hoverScale = 2.5; // Visual "ripple" scaling
+      }
+
+      points.forEach(point => {
+          point.scale.set(point.userData.hoverScale, point.userData.hoverScale, point.userData.hoverScale);
+      });
+      
+      renderer.render(scene, camera);
+  }
+
+  window.addEventListener('resize', () => {
+      const newWidth = container.clientWidth || window.innerWidth;
+      const newHeight = container.clientHeight || window.innerHeight;
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight);
+  });
+
+  animate();
+
+})();
+
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_5 -->
+</body>
+</html>
