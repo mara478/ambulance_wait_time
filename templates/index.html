@@ -3,10 +3,11 @@
 <html class="dark" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-```
+<meta charset="utf-8">
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
 <title>SF Ambulance Response Time Predictor</title>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -16,7 +17,7 @@
         darkMode: "class",
         theme: {
             extend: {
-                colors: {
+                "colors": {
                     "surface-bright": "#37393e",
                     "surface-tint": "#4cd6ff",
                     "glow-cyan": "rgba(0, 209, 255, 0.15)",
@@ -42,7 +43,7 @@
                     "on-surface-variant": "#bbc9cf",
                     "primary-container": "#00d1ff",
                     "secondary-fixed-dim": "#b9c3ff",
-                    "on-tertiary-container": "#00566a",
+                    "on-tertiary-container": "#a10012",
                     "primary-fixed": "#b7eaff",
                     "on-primary-container": "#00566a",
                     "on-surface": "#e2e2e8",
@@ -67,9 +68,7 @@
                     "on-error": "#690005",
                     "surface-container-highest": "#333539",
                     "surface-container-lowest": "#0c0e12",
-                    "on-secondary-container": "#d6daff",
-
-                    "result-blue": "#123B5D"
+                    "on-secondary-container": "#d6daff"
                 },
 
                 "borderRadius": {
@@ -107,7 +106,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-
 <style>
 
     body {
@@ -116,21 +114,11 @@
         font-family: theme('fontFamily.body-md');
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    h1, h2, h3, h4, h5, h6 {
         font-family: theme('fontFamily.headline-xl');
     }
 
-
-    /* =================================================
-       FORM
-       Keep all form text white.
-       ================================================= */
-
+    /* KEEP ALL FORM TEXT WHITE */
     .form-label-styled,
     label,
     .form-group label {
@@ -149,10 +137,7 @@
         color: rgba(255, 255, 255, 0.6) !important;
     }
 
-
-    /* =================================================
-       HERO
-       ================================================= */
+    /* ONLY THE HERO TEXT IS CHANGED */
 
     .hero-title-main {
         color: #000000 !important;
@@ -162,11 +147,7 @@
         color: #000000 !important;
     }
 
-
-    /* =================================================
-       RESPONSE TIME
-       Smaller + lighter + dark blue.
-       ================================================= */
+    /* ESTIMATED RESPONSE TIME */
 
     .result-heading {
         color: #123B5D !important;
@@ -184,13 +165,9 @@
         color: #123B5D !important;
         font-size: 0.9rem !important;
         font-weight: 400 !important;
-        line-height: 1.5 !important;
     }
 
-
-    /* =================================================
-       FOOTER LOGO
-       ================================================= */
+    /* FOOTER EMERGENCY_AI + ICON */
 
     .footer-logo,
     .footer-logo .material-symbols-outlined,
@@ -198,1125 +175,830 @@
         color: #ffffff !important;
     }
 
-
-    /* =================================================
-       HERO LAYOUT
-       
-       Keeps the text on the left and the 3D element
-       on the right with a compact gap.
-       ================================================= */
-
-    .hero-section {
-        margin-bottom: 0 !important;
-    }
-
-    .hero-text {
-        min-height: 400px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .hero-visual {
-        height: 400px;
-    }
-
-
-    /* =================================================
-       CONTENT BELOW HERO
-       
-       Small gap so the form begins shortly below the
-       hero instead of leaving a large empty area.
-       ================================================= */
-
-    .content-grid {
-        margin-top: -24px;
-    }
-
-
-    /* =================================================
-       RESPONSIVE
-       ================================================= */
-
-    @media (max-width: 1023px) {
-
-        .hero-text {
-            min-height: auto;
-        }
-
-        .hero-visual {
-            height: 350px;
-        }
-
-        .content-grid {
-            margin-top: 0;
-        }
-
-    }
-
 </style>
-```
 
 </head>
 
 <body class="min-h-screen flex flex-col">
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
+<!-- HEADER -->
 
 <header class="bg-surface-container-lowest border-b border-border-subtle sticky top-0 z-50">
 
-```
 <div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
 
-    <div class="flex items-center gap-2">
+<div class="flex items-center gap-2">
 
-        <span class="material-symbols-outlined text-primary text-2xl">
-            medical_services
-        </span>
+<span class="material-symbols-outlined text-primary text-2xl">
+medical_services
+</span>
 
-        <span class="font-headline-md text-white font-bold text-xl tracking-tight">
-            EMERGENCY_AI
-        </span>
-
-    </div>
-
-
-    <nav class="hidden md:flex items-center gap-8">
-
-        <a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
-            Predictor
-        </a>
-
-        <a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
-            Specs
-        </a>
-
-        <a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
-            Data
-        </a>
-
-    </nav>
+<span class="font-headline-md text-white font-bold text-xl tracking-tight">
+EMERGENCY_AI
+</span>
 
 </div>
-```
+
+<nav class="hidden md:flex items-center gap-8">
+
+<a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
+Predictor
+</a>
+
+<a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
+Specs
+</a>
+
+<a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
+Data
+</a>
+
+</nav>
+
+</div>
 
 </header>
 
-<!-- =====================================================
-     MAIN CONTENT
-     ===================================================== -->
+<!-- MAIN CONTENT -->
 
-<main class="flex-grow max-w-[1440px] mx-auto w-full px-4 md:px-8 py-8 flex flex-col">
+<main class="flex-grow max-w-[1440px] mx-auto w-full px-4 md:px-8 py-12 flex flex-col gap-12">
 
-<!-- =====================================================
-     HERO SECTION
-     
-     LEFT  = TEXT
-     RIGHT = 3D ELEMENT
-     ===================================================== -->
+<!-- HERO SECTION -->
 
-<section class="hero-section grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch relative">
-
-```
-<!-- Decorative glow -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
 
 <div class="absolute -top-24 -left-24 w-96 h-96 bg-glow-cyan rounded-full blur-[120px] pointer-events-none">
 </div>
 
+<div class="flex flex-col gap-6 z-10">
 
-<!-- =================================================
-     LEFT: HERO TEXT
-     ================================================= -->
+<h1 class="text-5xl md:text-6xl font-headline-xl font-bold leading-tight">
 
-<div class="hero-text flex flex-col gap-5 z-10">
+<span class="hero-title-main">
+Predicting Seconds,
+</span>
 
-    <h1 class="text-5xl md:text-6xl font-headline-xl font-bold leading-tight">
+<br>
 
-        <span class="hero-title-main">
-            Predicting Seconds,
-        </span>
+<span class="text-primary">
+Saving Lives
+</span>
 
-        <br>
+</h1>
 
-        <span class="text-primary">
-            Saving Lives
-        </span>
+<p class="text-lg md:text-xl font-body-lg max-w-xl leading-relaxed font-normal hero-description">
 
-    </h1>
+Predict estimated emergency medical response times using historical San Francisco emergency response data from 2023–2026. Empowering dispatchers with data-driven insights.
 
-
-    <p class="text-lg md:text-xl font-body-lg max-w-xl leading-relaxed font-normal hero-description">
-
-        Predict estimated emergency medical response times using historical San Francisco emergency response data from 2023–2026. Empowering dispatchers with data-driven insights.
-
-    </p>
+</p>
 
 </div>
 
+<!-- 3D OBJECT REMAINS IN ITS ORIGINAL RIGHT-HAND POSITION -->
 
-<!-- =================================================
-     RIGHT: 3D ELEMENT
-     ================================================= -->
+<div class="relative rounded-2xl border border-border-subtle bg-surface-container-low overflow-hidden h-[400px]">
 
-<div class="hero-visual relative rounded-2xl border border-border-subtle bg-surface-container-low overflow-hidden z-10">
+<div class="w-full h-full" id="threejs-container-ANIMATION_5">
+</div>
 
-    <div class="w-full h-full" id="threejs-container-ANIMATION_5">
-    </div>
+<script>
 
+(function() {
 
-    <script>
+    const container =
+        document.getElementById('threejs-container-ANIMATION_5');
 
-        (function() {
+    if (!container) return;
 
-            const container =
-                document.getElementById(
-                    'threejs-container-ANIMATION_5'
-                );
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
-            if (!container) return;
+    const scene = new THREE.Scene();
 
+    const camera =
+        new THREE.PerspectiveCamera(
+            75,
+            width / height,
+            0.1,
+            1000
+        );
 
-            const width =
+    const renderer =
+        new THREE.WebGLRenderer({
+            alpha: true,
+            antialias: true
+        });
+
+    renderer.setSize(width, height);
+
+    renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, 2)
+    );
+
+    container.appendChild(renderer.domElement);
+
+    const group = new THREE.Group();
+
+    scene.add(group);
+
+    const coreGeometry =
+        new THREE.IcosahedronGeometry(1.2, 2);
+
+    const coreMaterial =
+        new THREE.MeshPhongMaterial({
+            color: 0x00d1ff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.4,
+            shininess: 100
+        });
+
+    const core =
+        new THREE.Mesh(
+            coreGeometry,
+            coreMaterial
+        );
+
+    group.add(core);
+
+    const innerCoreGeometry =
+        new THREE.IcosahedronGeometry(0.6, 1);
+
+    const innerCoreMaterial =
+        new THREE.MeshPhongMaterial({
+            color: 0x00d1ff,
+            transparent: true,
+            opacity: 0.2,
+            emissive: 0x00d1ff,
+            emissiveIntensity: 0.5
+        });
+
+    const innerCore =
+        new THREE.Mesh(
+            innerCoreGeometry,
+            innerCoreMaterial
+        );
+
+    group.add(innerCore);
+
+    const points = [];
+
+    const pointGeometry =
+        new THREE.SphereGeometry(0.06, 12, 12);
+
+    const pointMaterialBase =
+        new THREE.MeshPhongMaterial({
+            color: 0xffffff
+        });
+
+    for (let i = 0; i < 45; i++) {
+
+        const point =
+            new THREE.Mesh(
+                pointGeometry,
+                pointMaterialBase.clone()
+            );
+
+        const phi =
+            Math.acos(
+                -1 + (2 * i) / 45
+            );
+
+        const theta =
+            Math.sqrt(45 * Math.PI) * phi;
+
+        point.position.setFromSphericalCoords(
+            2.5,
+            phi,
+            theta
+        );
+
+        point.userData = {
+            originalPosition:
+                point.position.clone(),
+
+            hoverScale: 1
+        };
+
+        group.add(point);
+
+        points.push(point);
+
+    }
+
+    const light =
+        new THREE.PointLight(
+            0xffffff,
+            1.2,
+            100
+        );
+
+    light.position.set(10, 10, 10);
+
+    scene.add(light);
+
+    const ambientLight =
+        new THREE.AmbientLight(
+            0x404040,
+            0.5
+        );
+
+    scene.add(ambientLight);
+
+    camera.position.z = 6;
+
+    const mouse =
+        new THREE.Vector2();
+
+    const raycaster =
+        new THREE.Raycaster();
+
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+
+    window.addEventListener(
+        'mousemove',
+        (event) => {
+
+            const rect =
+                container.getBoundingClientRect();
+
+            mouse.x =
+                ((event.clientX - rect.left) /
+                    rect.width) * 2 - 1;
+
+            mouse.y =
+                -((event.clientY - rect.top) /
+                    rect.height) * 2 + 1;
+
+            targetRotationY =
+                mouse.x * 0.5;
+
+            targetRotationX =
+                -mouse.y * 0.5;
+
+        }
+    );
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        group.rotation.x +=
+            (targetRotationX - group.rotation.x) * 0.05;
+
+        group.rotation.y +=
+            (targetRotationY - group.rotation.y) * 0.05;
+
+        core.rotation.y += 0.002;
+
+        innerCore.rotation.y -= 0.003;
+
+        const time =
+            Date.now() * 0.002;
+
+        const pulse =
+            1 + Math.sin(time) * 0.1;
+
+        core.scale.set(
+            pulse,
+            pulse,
+            pulse
+        );
+
+        innerCore.scale.set(
+            pulse * 0.8,
+            pulse * 0.8,
+            pulse * 0.8
+        );
+
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
+
+        const intersects =
+            raycaster.intersectObjects(points);
+
+        points.forEach(point => {
+
+            point.material.color.set(0xffffff);
+
+            point.userData.hoverScale +=
+                (1 - point.userData.hoverScale) * 0.1;
+
+            point.position.x =
+                point.userData.originalPosition.x +
+                Math.sin(
+                    time + point.position.y
+                ) * 0.1;
+
+            point.position.z =
+                point.userData.originalPosition.z +
+                Math.cos(
+                    time + point.position.x
+                ) * 0.1;
+
+        });
+
+        if (intersects.length > 0) {
+
+            const hovered =
+                intersects[0].object;
+
+            hovered.material.color.set(0x00d1ff);
+
+            hovered.userData.hoverScale = 2.5;
+
+        }
+
+        points.forEach(point => {
+
+            point.scale.set(
+                point.userData.hoverScale,
+                point.userData.hoverScale,
+                point.userData.hoverScale
+            );
+
+        });
+
+        renderer.render(
+            scene,
+            camera
+        );
+
+    }
+
+    window.addEventListener(
+        'resize',
+        () => {
+
+            const newWidth =
                 container.clientWidth;
 
-            const height =
+            const newHeight =
                 container.clientHeight;
 
+            camera.aspect =
+                newWidth / newHeight;
 
-            const scene =
-                new THREE.Scene();
-
-
-            const camera =
-                new THREE.PerspectiveCamera(
-                    75,
-                    width / height,
-                    0.1,
-                    1000
-                );
-
-
-            const renderer =
-                new THREE.WebGLRenderer({
-                    alpha: true,
-                    antialias: true
-                });
-
+            camera.updateProjectionMatrix();
 
             renderer.setSize(
-                width,
-                height
+                newWidth,
+                newHeight
             );
 
+        }
+    );
 
-            renderer.setPixelRatio(
-                Math.min(
-                    window.devicePixelRatio,
-                    2
-                )
-            );
+    animate();
 
+})();
 
-            container.appendChild(
-                renderer.domElement
-            );
-
-
-            const group =
-                new THREE.Group();
-
-            scene.add(group);
-
-
-            /* CORE */
-
-            const coreGeometry =
-                new THREE.IcosahedronGeometry(
-                    1.2,
-                    2
-                );
-
-
-            const coreMaterial =
-                new THREE.MeshPhongMaterial({
-                    color: 0x00d1ff,
-                    wireframe: true,
-                    transparent: true,
-                    opacity: 0.4,
-                    shininess: 100
-                });
-
-
-            const core =
-                new THREE.Mesh(
-                    coreGeometry,
-                    coreMaterial
-                );
-
-
-            group.add(core);
-
-
-            /* INNER CORE */
-
-            const innerCoreGeometry =
-                new THREE.IcosahedronGeometry(
-                    0.6,
-                    1
-                );
-
-
-            const innerCoreMaterial =
-                new THREE.MeshPhongMaterial({
-                    color: 0x00d1ff,
-                    transparent: true,
-                    opacity: 0.2,
-                    emissive: 0x00d1ff,
-                    emissiveIntensity: 0.5
-                });
-
-
-            const innerCore =
-                new THREE.Mesh(
-                    innerCoreGeometry,
-                    innerCoreMaterial
-                );
-
-
-            group.add(innerCore);
-
-
-            /* POINTS */
-
-            const points = [];
-
-
-            const pointGeometry =
-                new THREE.SphereGeometry(
-                    0.06,
-                    12,
-                    12
-                );
-
-
-            const pointMaterialBase =
-                new THREE.MeshPhongMaterial({
-                    color: 0xffffff
-                });
-
-
-            for (let i = 0; i < 45; i++) {
-
-                const point =
-                    new THREE.Mesh(
-                        pointGeometry,
-                        pointMaterialBase.clone()
-                    );
-
-
-                const phi =
-                    Math.acos(
-                        -1 + (2 * i) / 45
-                    );
-
-
-                const theta =
-                    Math.sqrt(
-                        45 * Math.PI
-                    ) * phi;
-
-
-                point.position.setFromSphericalCoords(
-                    2.5,
-                    phi,
-                    theta
-                );
-
-
-                point.userData = {
-
-                    originalPosition:
-                        point.position.clone(),
-
-                    hoverScale: 1
-
-                };
-
-
-                group.add(point);
-
-                points.push(point);
-
-            }
-
-
-            /* LIGHTING */
-
-            const light =
-                new THREE.PointLight(
-                    0xffffff,
-                    1.2,
-                    100
-                );
-
-
-            light.position.set(
-                10,
-                10,
-                10
-            );
-
-
-            scene.add(light);
-
-
-            const ambientLight =
-                new THREE.AmbientLight(
-                    0x404040,
-                    0.5
-                );
-
-
-            scene.add(
-                ambientLight
-            );
-
-
-            camera.position.z = 6;
-
-
-            const mouse =
-                new THREE.Vector2();
-
-
-            const raycaster =
-                new THREE.Raycaster();
-
-
-            let targetRotationX = 0;
-
-            let targetRotationY = 0;
-
-
-            window.addEventListener(
-                'mousemove',
-                (event) => {
-
-                    const rect =
-                        container.getBoundingClientRect();
-
-
-                    mouse.x =
-                        ((event.clientX -
-                            rect.left) /
-                            rect.width) *
-                        2 - 1;
-
-
-                    mouse.y =
-                        -((event.clientY -
-                            rect.top) /
-                            rect.height) *
-                        2 + 1;
-
-
-                    targetRotationY =
-                        mouse.x * 0.5;
-
-
-                    targetRotationX =
-                        -mouse.y * 0.5;
-
-                }
-            );
-
-
-            function animate() {
-
-                requestAnimationFrame(
-                    animate
-                );
-
-
-                group.rotation.x +=
-                    (
-                        targetRotationX -
-                        group.rotation.x
-                    ) * 0.05;
-
-
-                group.rotation.y +=
-                    (
-                        targetRotationY -
-                        group.rotation.y
-                    ) * 0.05;
-
-
-                core.rotation.y +=
-                    0.002;
-
-
-                innerCore.rotation.y -=
-                    0.003;
-
-
-                const time =
-                    Date.now() * 0.002;
-
-
-                const pulse =
-                    1 +
-                    Math.sin(time) *
-                    0.1;
-
-
-                core.scale.set(
-                    pulse,
-                    pulse,
-                    pulse
-                );
-
-
-                innerCore.scale.set(
-                    pulse * 0.8,
-                    pulse * 0.8,
-                    pulse * 0.8
-                );
-
-
-                raycaster.setFromCamera(
-                    mouse,
-                    camera
-                );
-
-
-                const intersects =
-                    raycaster.intersectObjects(
-                        points
-                    );
-
-
-                points.forEach(point => {
-
-                    point.material.color.set(
-                        0xffffff
-                    );
-
-
-                    point.userData.hoverScale +=
-                        (
-                            1 -
-                            point.userData.hoverScale
-                        ) * 0.1;
-
-
-                    point.position.x =
-                        point.userData.originalPosition.x +
-                        Math.sin(
-                            time +
-                            point.position.y
-                        ) * 0.1;
-
-
-                    point.position.z =
-                        point.userData.originalPosition.z +
-                        Math.cos(
-                            time +
-                            point.position.x
-                        ) * 0.1;
-
-                });
-
-
-                if (intersects.length > 0) {
-
-                    const hovered =
-                        intersects[0].object;
-
-
-                    hovered.material.color.set(
-                        0x00d1ff
-                    );
-
-
-                    hovered.userData.hoverScale =
-                        2.5;
-
-                }
-
-
-                points.forEach(point => {
-
-                    point.scale.set(
-                        point.userData.hoverScale,
-                        point.userData.hoverScale,
-                        point.userData.hoverScale
-                    );
-
-                });
-
-
-                renderer.render(
-                    scene,
-                    camera
-                );
-
-            }
-
-
-            window.addEventListener(
-                'resize',
-                () => {
-
-                    const newWidth =
-                        container.clientWidth;
-
-                    const newHeight =
-                        container.clientHeight;
-
-
-                    camera.aspect =
-                        newWidth /
-                        newHeight;
-
-
-                    camera.updateProjectionMatrix();
-
-
-                    renderer.setSize(
-                        newWidth,
-                        newHeight
-                    );
-
-                }
-            );
-
-
-            animate();
-
-        })();
-
-    </script>
+</script>
 
 </div>
-```
 
 </section>
 
-<!-- =====================================================
-     CONTENT GRID
-     
-     This now sits close underneath the hero.
-     ===================================================== -->
+<!-- CONTENT GRID — ORIGINAL LAYOUT PRESERVED -->
 
-<div class="content-grid grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
 
-```
-<!-- =================================================
-     PREDICTION FORM
-     ================================================= -->
+<!-- PREDICTION FORM -->
 
 <section class="lg:col-span-2 bg-surface-card rounded-2xl border border-border-subtle p-6 md:p-8 shadow-xl">
 
+<div class="flex items-center gap-3 mb-8 border-b border-border-subtle border-primary/20 pb-6">
 
-    <div class="flex items-center gap-3 mb-8 border-b border-border-subtle border-primary/20 pb-6">
+<span class="material-symbols-outlined text-primary">
+data_usage
+</span>
 
-        <span class="material-symbols-outlined text-primary">
-            data_usage
-        </span>
+<!-- THIS STAYS WHITE -->
 
+<h2 class="text-2xl font-headline-md font-semibold text-white tracking-tight">
+Emergency Call Characteristics
+</h2>
 
-        <!-- IMPORTANT:
-             This remains WHITE. -->
+</div>
 
-        <h2 class="text-2xl font-headline-md font-semibold text-white tracking-tight">
-            Emergency Call Characteristics
-        </h2>
+<form class="flex flex-col gap-6" id="prediction-form">
 
-    </div>
+<!-- TIME -->
 
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    <form class="flex flex-col gap-6" id="prediction-form">
+<div class="form-group">
 
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="hour">
+Hour of Day (0–23)
+</label>
 
-        <!-- TIME -->
+<input
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="hour"
+max="23"
+min="0"
+name="hour"
+required
+type="number"
+value="14">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+</div>
 
-            <div class="form-group">
+<div class="form-group">
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="hour">
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="day_of_week">
+Day of Week
+</label>
 
-                    Hour of Day (0–23)
+<select
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="day_of_week"
+name="day_of_week"
+required>
 
-                </label>
+<option value="Monday">
+Monday
+</option>
 
+<option selected value="Tuesday">
+Tuesday
+</option>
 
-                <input
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="hour"
-                    max="23"
-                    min="0"
-                    name="hour"
-                    required
-                    type="number"
-                    value="14">
+<option value="Wednesday">
+Wednesday
+</option>
 
-            </div>
+<option value="Thursday">
+Thursday
+</option>
 
+<option value="Friday">
+Friday
+</option>
 
-            <div class="form-group">
+<option value="Saturday">
+Saturday
+</option>
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="day_of_week">
+<option value="Sunday">
+Sunday
+</option>
 
-                    Day of Week
+</select>
 
-                </label>
+</div>
 
+</div>
 
-                <select
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="day_of_week"
-                    name="day_of_week"
-                    required>
+<!-- PRIORITY + UNIT -->
 
-                    <option value="Monday">
-                        Monday
-                    </option>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    <option selected value="Tuesday">
-                        Tuesday
-                    </option>
+<div class="form-group">
 
-                    <option value="Wednesday">
-                        Wednesday
-                    </option>
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="priority">
+Priority Level
+</label>
 
-                    <option value="Thursday">
-                        Thursday
-                    </option>
+<select
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="priority"
+name="priority"
+required>
 
-                    <option value="Friday">
-                        Friday
-                    </option>
+<option value="1">
+Priority 1 (Emergency)
+</option>
 
-                    <option value="Saturday">
-                        Saturday
-                    </option>
+<option selected value="2">
+Priority 2 (Urgent)
+</option>
 
-                    <option value="Sunday">
-                        Sunday
-                    </option>
+<option value="3">
+Priority 3
+</option>
 
-                </select>
+<option value="E">
+Priority E
+</option>
 
-            </div>
+<option value="I">
+Priority I
+</option>
 
-        </div>
+</select>
 
+</div>
 
-        <!-- PRIORITY + UNIT -->
+<div class="form-group">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="unit_type">
+Unit Type
+</label>
 
-            <div class="form-group">
+<select
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="unit_type"
+name="unit_type"
+required>
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="priority">
+<option selected value="MEDIC">
+MEDIC
+</option>
 
-                    Priority Level
+<option value="PRIVATE">
+PRIVATE
+</option>
 
-                </label>
+</select>
 
+</div>
 
-                <select
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="priority"
-                    name="priority"
-                    required>
+</div>
 
-                    <option value="1">
-                        Priority 1 (Emergency)
-                    </option>
+<!-- LOCATION -->
 
-                    <option selected value="2">
-                        Priority 2 (Urgent)
-                    </option>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    <option value="3">
-                        Priority 3
-                    </option>
+<div class="form-group">
 
-                    <option value="E">
-                        Priority E
-                    </option>
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="zipcode">
+ZIP Code
+</label>
 
-                    <option value="I">
-                        Priority I
-                    </option>
+<input
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="zipcode"
+name="zipcode"
+placeholder="e.g. 94107"
+required
+type="text"
+value="94107">
 
-                </select>
+</div>
 
-            </div>
+<div class="form-group">
 
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="station_area">
+Station Area
+</label>
 
-            <div class="form-group">
+<input
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="station_area"
+name="station_area"
+placeholder="e.g. 01"
+type="text"
+value="01">
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="unit_type">
+</div>
 
-                    Unit Type
+</div>
 
-                </label>
+<!-- NEIGHBORHOOD + ALS -->
 
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
-                <select
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="unit_type"
-                    name="unit_type"
-                    required>
+<div class="form-group">
 
-                    <option selected value="MEDIC">
-                        MEDIC
-                    </option>
+<label class="form-label-styled font-semibold tracking-wide uppercase text-xs" for="neighborhood">
+Neighborhood
+</label>
 
-                    <option value="PRIVATE">
-                        PRIVATE
-                    </option>
+<input
+class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+id="neighborhood"
+name="neighborhood"
+placeholder="e.g. South of Market"
+type="text"
+value="South of Market">
 
-                </select>
+</div>
 
-            </div>
+<div class="form-group checkbox-group flex items-center h-10 bg-surface-container-low/50 p-2 rounded-lg border border-outline-variant/30">
 
-        </div>
+<label class="flex items-center gap-3 cursor-pointer hover:text-primary transition-colors" for="als_unit">
 
+<input
+checked
+class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-card bg-surface-container"
+id="als_unit"
+name="als_unit"
+type="checkbox">
 
-        <!-- LOCATION -->
+<span class="font-body-md text-white">
+Advanced Life Support (ALS) Unit
+</span>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+</label>
 
-            <div class="form-group">
+</div>
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="zipcode">
+</div>
 
-                    ZIP Code
+<!-- SUBMIT -->
 
-                </label>
+<div class="mt-6 pt-6 border-t border-border-subtle">
 
+<button
+class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary font-headline-md font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+id="submit-btn"
+type="submit">
 
-                <input
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="zipcode"
-                    name="zipcode"
-                    placeholder="e.g. 94107"
-                    required
-                    type="text"
-                    value="94107">
+<span class="material-symbols-outlined">
+analytics
+</span>
 
-            </div>
+Predict Response Time
 
+</button>
 
-            <div class="form-group">
+</div>
 
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="station_area">
-
-                    Station Area
-
-                </label>
-
-
-                <input
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="station_area"
-                    name="station_area"
-                    placeholder="e.g. 01"
-                    type="text"
-                    value="01">
-
-            </div>
-
-        </div>
-
-
-        <!-- NEIGHBORHOOD + ALS -->
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-
-            <div class="form-group">
-
-                <label
-                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                    for="neighborhood">
-
-                    Neighborhood
-
-                </label>
-
-
-                <input
-                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                    id="neighborhood"
-                    name="neighborhood"
-                    placeholder="e.g. South of Market"
-                    type="text"
-                    value="South of Market">
-
-            </div>
-
-
-            <div class="form-group checkbox-group flex items-center h-10 bg-surface-container-low/50 p-2 rounded-lg border border-outline-variant/30">
-
-                <label
-                    class="flex items-center gap-3 cursor-pointer hover:text-primary transition-colors"
-                    for="als_unit">
-
-                    <input
-                        checked
-                        class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-card bg-surface-container"
-                        id="als_unit"
-                        name="als_unit"
-                        type="checkbox">
-
-                    <span class="font-body-md text-white">
-                        Advanced Life Support (ALS) Unit
-                    </span>
-
-                </label>
-
-            </div>
-
-        </div>
-
-
-        <!-- SUBMIT -->
-
-        <div class="mt-6 pt-6 border-t border-border-subtle">
-
-            <button
-                class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary font-headline-md font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-                id="submit-btn"
-                type="submit">
-
-                <span class="material-symbols-outlined">
-                    analytics
-                </span>
-
-                Predict Response Time
-
-            </button>
-
-        </div>
-
-    </form>
+</form>
 
 </section>
 
-
-<!-- =================================================
-     SIDEBAR
-     ================================================= -->
+<!-- SIDEBAR -->
 
 <div class="flex flex-col gap-6">
 
+<!-- ESTIMATED RESPONSE TIME -->
 
-    <!-- RESPONSE TIME -->
+<section
+class="bg-primary-container text-on-primary-container rounded-2xl p-6 shadow-lg border border-primary-fixed-dim relative overflow-hidden"
+id="result-card">
 
-    <section
-        class="bg-primary-container text-on-primary-container rounded-2xl p-6 shadow-lg border border-primary-fixed-dim relative overflow-hidden"
-        id="result-card">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none">
+</div>
 
+<div class="flex items-center gap-2 mb-4 relative z-10">
 
-        <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none">
-        </div>
+<span class="material-symbols-outlined text-on-primary-container">
+timer
+</span>
 
+<!-- ONLY THIS HEADING'S SIZE/WEIGHT/COLOR CHANGED -->
 
-        <div class="flex items-center gap-2 mb-4 relative z-10">
-
-            <span class="material-symbols-outlined text-on-primary-container">
-                timer
-            </span>
-
-
-            <h2 class="result-heading font-headline-md tracking-tight">
-                Estimated Response Time
-            </h2>
-
-        </div>
-
-
-        <div
-            class="result-display relative z-10 min-h-[140px] flex items-center justify-center bg-black/30 rounded-xl p-6 border border-white/10 tracking-tight"
-            id="result-display">
-
-            <span class="placeholder-text text-center">
-
-                Enter call details and click predict to see estimated time.
-
-            </span>
-
-        </div>
-
-
-        <div
-            class="error-message hidden mt-4 p-3 bg-error-container text-on-error-container rounded-lg text-sm font-body-md relative z-10"
-            id="error-message">
-        </div>
-
-    </section>
-
-
-    <!-- MODEL SPECIFICATIONS -->
-
-    <section class="bg-surface-card rounded-2xl border border-border-subtle p-6">
-
-        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-border-subtle">
-
-            <span class="material-symbols-outlined text-white">
-                info
-            </span>
-
-
-            <h3 class="text-lg font-headline-md font-semibold text-white">
-                Model Specifications
-            </h3>
-
-        </div>
-
-
-        <ul class="flex flex-col gap-4 font-body-md text-sm">
-
-            <li class="flex flex-col gap-1">
-
-                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                    Dataset Period
-                </span>
-
-                <span class="text-white font-data-mono bg-surface-container px-2 py-1 rounded inline-block w-fit">
-                    2023–2026
-                </span>
-
-            </li>
-
-
-            <li class="flex flex-col gap-1">
-
-                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                    Training Records
-                </span>
-
-                <span class="text-white">
-                    Historical emergency-response records
-                </span>
-
-            </li>
-
-
-            <li class="flex flex-col gap-1">
-
-                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                    Primary Metric
-                </span>
-
-                <span class="text-white">
-                    Mean Absolute Error (MAE)
-                </span>
-
-            </li>
-
-
-            <li class="flex flex-col gap-1">
-
-                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                    Model Architecture
-                </span>
-
-                <span class="text-primary font-data-mono text-sm break-all">
-                    HistGradientBoostingRegressor
-                </span>
-
-            </li>
-
-        </ul>
-
-    </section>
+<h2 class="result-heading tracking-tight">
+Estimated Response Time
+</h2>
 
 </div>
-```
+
+<!-- ONLY THIS RESULT TEXT'S SIZE/WEIGHT/COLOR CHANGED -->
+
+<div
+class="result-display relative z-10 min-h-[140px] flex items-center justify-center bg-black/30 rounded-xl p-6 border border-white/10 tracking-tight"
+id="result-display">
+
+<span class="placeholder-text text-center">
+
+Enter call details and click predict to see estimated time.
+
+</span>
+
+</div>
+
+<div
+class="error-message hidden mt-4 p-3 bg-error-container text-on-error-container rounded-lg text-sm font-body-md relative z-10"
+id="error-message">
+</div>
+
+</section>
+
+<!-- MODEL SPECIFICATIONS — UNCHANGED -->
+
+<section class="bg-surface-card rounded-2xl border border-border-subtle p-6">
+
+<div class="flex items-center gap-2 mb-4 pb-3 border-b border-border-subtle">
+
+<span class="material-symbols-outlined text-white">
+info
+</span>
+
+<h3 class="text-lg font-headline-md font-semibold text-white">
+Model Specifications
+</h3>
+
+</div>
+
+<ul class="flex flex-col gap-4 font-body-md text-sm">
+
+<li class="flex flex-col gap-1">
+
+<span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+Dataset Period
+</span>
+
+<span class="text-white font-data-mono bg-surface-container px-2 py-1 rounded inline-block w-fit">
+2023–2026
+</span>
+
+</li>
+
+<li class="flex flex-col gap-1">
+
+<span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+Training Records
+</span>
+
+<span class="text-white">
+Historical emergency-response records
+</span>
+
+</li>
+
+<li class="flex flex-col gap-1">
+
+<span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+Primary Metric
+</span>
+
+<span class="text-white">
+Mean Absolute Error (MAE)
+</span>
+
+</li>
+
+<li class="flex flex-col gap-1">
+
+<span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+Model Architecture
+</span>
+
+<span class="text-primary font-data-mono text-sm break-all">
+HistGradientBoostingRegressor
+</span>
+
+</li>
+
+</ul>
+
+</section>
+
+</div>
 
 </div>
 
 </main>
 
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
+<!-- FOOTER -->
 
 <footer class="bg-surface-container-lowest border-t border-border-subtle mt-auto py-8">
 
-```
 <div class="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
+<!-- EMERGENCY_AI + ICON ARE WHITE -->
 
-    <div class="footer-logo flex items-center gap-2 opacity-70">
+<div class="footer-logo flex items-center gap-2 opacity-70">
 
-        <span class="material-symbols-outlined text-xl">
-            medical_services
-        </span>
+<span class="material-symbols-outlined text-xl">
+medical_services
+</span>
 
-        <span class="font-headline-md font-bold text-sm">
-            EMERGENCY_AI
-        </span>
-
-    </div>
-
-
-    <p class="disclaimer text-sm text-text-muted text-center md:text-left max-w-2xl font-body-md">
-
-        <strong class="text-white font-semibold">
-            Disclaimer:
-        </strong>
-
-        This application provides an estimate based on historical emergency-response data.
-
-        It is
-        <span class="text-error font-medium">
-            not an emergency dispatch system
-        </span>
-        and should not be used to make real-time emergency decisions.
-
-    </p>
-
-
-    <div class="flex gap-4 text-sm text-text-muted">
-
-        <a class="hover:text-primary transition-colors" href="#">
-            Terms
-        </a>
-
-        <a class="hover:text-primary transition-colors" href="#">
-            Privacy
-        </a>
-
-    </div>
+<span class="font-headline-md font-bold text-sm">
+EMERGENCY_AI
+</span>
 
 </div>
-```
+
+<p class="disclaimer text-sm text-text-muted text-center md:text-left max-w-2xl font-body-md">
+
+<strong class="text-white font-semibold">
+Disclaimer:
+</strong>
+
+This application provides an estimate based on historical emergency-response data.
+
+It is <span class="text-error font-medium">
+not an emergency dispatch system </span>
+and should not be used to make real-time emergency decisions.
+
+</p>
+
+<div class="flex gap-4 text-sm text-text-muted">
+
+<a class="hover:text-primary transition-colors" href="#">
+Terms
+</a>
+
+<a class="hover:text-primary transition-colors" href="#">
+Privacy
+</a>
+
+</div>
+
+</div>
 
 </footer>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
+
 </html>
