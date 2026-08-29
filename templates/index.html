@@ -101,7 +101,6 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: theme('fontFamily.headline-xl');
         }
-        /* FORCED WHITE TEXT FOR LABELS AND INPUTS */
         .form-label-styled,
         label,
         .form-group label {
@@ -144,7 +143,7 @@
                     Predicting Seconds,<br>
 <span class="text-primary">Saving Lives</span>
 </h1>
-<p class="text-lg md:text-xl text-white font-body-lg max-w-xl leading-relaxed">
+<p class="text-lg md:text-xl text-slate-100 font-body-lg max-w-xl leading-relaxed font-normal">
                     Predict estimated emergency medical response times using historical San Francisco emergency response data from 2023–2026. Empowering dispatchers with data-driven insights.
                 </p>
 </div>
@@ -371,8 +370,8 @@
 <span class="material-symbols-outlined text-on-primary-container">timer</span>
 <h2 class="text-xl font-headline-md font-bold tracking-tight">Estimated Response Time</h2>
 </div>
-<div class="result-display relative z-10 min-h-[120px] flex items-center justify-center bg-black/10 rounded-xl p-4 border border-black/5" id="result-display">
-<span class="placeholder-text text-on-primary-container/70 font-body-md text-center">
+<div class="result-display relative z-10 min-h-[140px] flex items-center justify-center bg-black/30 rounded-xl p-6 border border-white/10 text-4xl md:text-5xl font-bold text-white tracking-tight" id="result-display">
+<span class="placeholder-text text-on-primary-container/70 font-body-md text-base font-normal text-center">
                             Enter call details and click predict to see estimated time.
                         </span>
 </div>
