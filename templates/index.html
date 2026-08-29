@@ -42,7 +42,7 @@
                     "on-surface-variant": "#bbc9cf",
                     "primary-container": "#00d1ff",
                     "secondary-fixed-dim": "#b9c3ff",
-                    "on-tertiary-container": "#a10012",
+                    "on-tertiary-container": "#00566a",
                     "primary-fixed": "#b7eaff",
                     "on-primary-container": "#00566a",
                     "on-surface": "#e2e2e8",
@@ -69,7 +69,6 @@
                     "surface-container-lowest": "#0c0e12",
                     "on-secondary-container": "#d6daff",
 
-                    /* Dark blue used for the response-time result */
                     "result-blue": "#123B5D"
                 },
 
@@ -108,7 +107,9 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
+
 <style>
+
     body {
         background-color: theme('colors.background');
         color: theme('colors.on-background');
@@ -124,10 +125,11 @@
         font-family: theme('fontFamily.headline-xl');
     }
 
-    /* -------------------------------------------------
-       FORM TEXT
-       Keep the entire dark Emergency Call form white.
-       ------------------------------------------------- */
+
+    /* =================================================
+       FORM
+       Keep all form text white.
+       ================================================= */
 
     .form-label-styled,
     label,
@@ -147,11 +149,10 @@
         color: rgba(255, 255, 255, 0.6) !important;
     }
 
-    /* -------------------------------------------------
-       HERO SECTION
-       Black text on the light hero area.
-       "Saving Lives" remains cyan.
-       ------------------------------------------------- */
+
+    /* =================================================
+       HERO
+       ================================================= */
 
     .hero-title-main {
         color: #000000 !important;
@@ -161,10 +162,11 @@
         color: #000000 !important;
     }
 
-    /* -------------------------------------------------
+
+    /* =================================================
        RESPONSE TIME
-       Smaller, lighter and dark blue.
-       ------------------------------------------------- */
+       Smaller + lighter + dark blue.
+       ================================================= */
 
     .result-heading {
         color: #123B5D !important;
@@ -185,16 +187,73 @@
         line-height: 1.5 !important;
     }
 
-    /* -------------------------------------------------
+
+    /* =================================================
        FOOTER LOGO
-       White icon + EMERGENCY_AI text.
-       ------------------------------------------------- */
+       ================================================= */
 
     .footer-logo,
     .footer-logo .material-symbols-outlined,
     .footer-logo span {
         color: #ffffff !important;
     }
+
+
+    /* =================================================
+       HERO LAYOUT
+       
+       Keeps the text on the left and the 3D element
+       on the right with a compact gap.
+       ================================================= */
+
+    .hero-section {
+        margin-bottom: 0 !important;
+    }
+
+    .hero-text {
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-visual {
+        height: 400px;
+    }
+
+
+    /* =================================================
+       CONTENT BELOW HERO
+       
+       Small gap so the form begins shortly below the
+       hero instead of leaving a large empty area.
+       ================================================= */
+
+    .content-grid {
+        margin-top: -24px;
+    }
+
+
+    /* =================================================
+       RESPONSIVE
+       ================================================= */
+
+    @media (max-width: 1023px) {
+
+        .hero-text {
+            min-height: auto;
+        }
+
+        .hero-visual {
+            height: 350px;
+        }
+
+        .content-grid {
+            margin-top: 0;
+        }
+
+    }
+
 </style>
 ```
 
@@ -223,6 +282,7 @@
 
     </div>
 
+
     <nav class="hidden md:flex items-center gap-8">
 
         <a class="text-white hover:text-primary transition-colors font-body-md font-medium" href="#">
@@ -248,19 +308,29 @@
      MAIN CONTENT
      ===================================================== -->
 
-<main class="flex-grow max-w-[1440px] mx-auto w-full px-4 md:px-8 py-12 flex flex-col gap-12">
+<main class="flex-grow max-w-[1440px] mx-auto w-full px-4 md:px-8 py-8 flex flex-col">
 
 <!-- =====================================================
      HERO SECTION
+     
+     LEFT  = TEXT
+     RIGHT = 3D ELEMENT
      ===================================================== -->
 
-<section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+<section class="hero-section grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch relative">
 
 ```
-<div class="absolute -top-24 -left-24 w-96 h-96 bg-glow-cyan rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Decorative glow -->
+
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-glow-cyan rounded-full blur-[120px] pointer-events-none">
+</div>
 
 
-<div class="flex flex-col gap-6 z-10">
+<!-- =================================================
+     LEFT: HERO TEXT
+     ================================================= -->
+
+<div class="hero-text flex flex-col gap-5 z-10">
 
     <h1 class="text-5xl md:text-6xl font-headline-xl font-bold leading-tight">
 
@@ -286,25 +356,38 @@
 </div>
 
 
-<!-- THREE.JS ANIMATION -->
+<!-- =================================================
+     RIGHT: 3D ELEMENT
+     ================================================= -->
 
-<div class="relative rounded-2xl border border-border-subtle bg-surface-container-low overflow-hidden h-[400px]">
+<div class="hero-visual relative rounded-2xl border border-border-subtle bg-surface-container-low overflow-hidden z-10">
 
-    <div class="w-full h-full" id="threejs-container-ANIMATION_5"></div>
+    <div class="w-full h-full" id="threejs-container-ANIMATION_5">
+    </div>
 
 
     <script>
+
         (function() {
 
             const container =
-                document.getElementById('threejs-container-ANIMATION_5');
+                document.getElementById(
+                    'threejs-container-ANIMATION_5'
+                );
 
             if (!container) return;
 
-            const width = container.clientWidth;
-            const height = container.clientHeight;
 
-            const scene = new THREE.Scene();
+            const width =
+                container.clientWidth;
+
+            const height =
+                container.clientHeight;
+
+
+            const scene =
+                new THREE.Scene();
+
 
             const camera =
                 new THREE.PerspectiveCamera(
@@ -314,30 +397,47 @@
                     1000
                 );
 
+
             const renderer =
                 new THREE.WebGLRenderer({
                     alpha: true,
                     antialias: true
                 });
 
-            renderer.setSize(width, height);
 
-            renderer.setPixelRatio(
-                Math.min(window.devicePixelRatio, 2)
+            renderer.setSize(
+                width,
+                height
             );
 
-            container.appendChild(renderer.domElement);
+
+            renderer.setPixelRatio(
+                Math.min(
+                    window.devicePixelRatio,
+                    2
+                )
+            );
 
 
-            const group = new THREE.Group();
+            container.appendChild(
+                renderer.domElement
+            );
+
+
+            const group =
+                new THREE.Group();
 
             scene.add(group);
 
 
-            /* Core */
+            /* CORE */
 
             const coreGeometry =
-                new THREE.IcosahedronGeometry(1.2, 2);
+                new THREE.IcosahedronGeometry(
+                    1.2,
+                    2
+                );
+
 
             const coreMaterial =
                 new THREE.MeshPhongMaterial({
@@ -348,19 +448,25 @@
                     shininess: 100
                 });
 
+
             const core =
                 new THREE.Mesh(
                     coreGeometry,
                     coreMaterial
                 );
 
+
             group.add(core);
 
 
-            /* Inner Core */
+            /* INNER CORE */
 
             const innerCoreGeometry =
-                new THREE.IcosahedronGeometry(0.6, 1);
+                new THREE.IcosahedronGeometry(
+                    0.6,
+                    1
+                );
+
 
             const innerCoreMaterial =
                 new THREE.MeshPhongMaterial({
@@ -371,18 +477,21 @@
                     emissiveIntensity: 0.5
                 });
 
+
             const innerCore =
                 new THREE.Mesh(
                     innerCoreGeometry,
                     innerCoreMaterial
                 );
 
+
             group.add(innerCore);
 
 
-            /* Points */
+            /* POINTS */
 
             const points = [];
+
 
             const pointGeometry =
                 new THREE.SphereGeometry(
@@ -390,6 +499,7 @@
                     12,
                     12
                 );
+
 
             const pointMaterialBase =
                 new THREE.MeshPhongMaterial({
@@ -405,13 +515,18 @@
                         pointMaterialBase.clone()
                     );
 
+
                 const phi =
                     Math.acos(
                         -1 + (2 * i) / 45
                     );
 
+
                 const theta =
-                    Math.sqrt(45 * Math.PI) * phi;
+                    Math.sqrt(
+                        45 * Math.PI
+                    ) * phi;
+
 
                 point.position.setFromSphericalCoords(
                     2.5,
@@ -419,20 +534,25 @@
                     theta
                 );
 
+
                 point.userData = {
+
                     originalPosition:
                         point.position.clone(),
 
                     hoverScale: 1
+
                 };
+
 
                 group.add(point);
 
                 points.push(point);
+
             }
 
 
-            /* Lighting */
+            /* LIGHTING */
 
             const light =
                 new THREE.PointLight(
@@ -441,7 +561,13 @@
                     100
                 );
 
-            light.position.set(10, 10, 10);
+
+            light.position.set(
+                10,
+                10,
+                10
+            );
+
 
             scene.add(light);
 
@@ -452,7 +578,10 @@
                     0.5
                 );
 
-            scene.add(ambientLight);
+
+            scene.add(
+                ambientLight
+            );
 
 
             camera.position.z = 6;
@@ -461,11 +590,13 @@
             const mouse =
                 new THREE.Vector2();
 
+
             const raycaster =
                 new THREE.Raycaster();
 
 
             let targetRotationX = 0;
+
             let targetRotationY = 0;
 
 
@@ -476,47 +607,69 @@
                     const rect =
                         container.getBoundingClientRect();
 
+
                     mouse.x =
-                        ((event.clientX - rect.left) /
-                            rect.width) * 2 - 1;
+                        ((event.clientX -
+                            rect.left) /
+                            rect.width) *
+                        2 - 1;
+
 
                     mouse.y =
-                        -((event.clientY - rect.top) /
-                            rect.height) * 2 + 1;
+                        -((event.clientY -
+                            rect.top) /
+                            rect.height) *
+                        2 + 1;
+
 
                     targetRotationY =
                         mouse.x * 0.5;
 
+
                     targetRotationX =
                         -mouse.y * 0.5;
+
                 }
             );
 
 
             function animate() {
 
-                requestAnimationFrame(animate);
+                requestAnimationFrame(
+                    animate
+                );
 
 
                 group.rotation.x +=
-                    (targetRotationX -
-                        group.rotation.x) * 0.05;
+                    (
+                        targetRotationX -
+                        group.rotation.x
+                    ) * 0.05;
+
 
                 group.rotation.y +=
-                    (targetRotationY -
-                        group.rotation.y) * 0.05;
+                    (
+                        targetRotationY -
+                        group.rotation.y
+                    ) * 0.05;
 
 
-                core.rotation.y += 0.002;
+                core.rotation.y +=
+                    0.002;
 
-                innerCore.rotation.y -= 0.003;
+
+                innerCore.rotation.y -=
+                    0.003;
 
 
                 const time =
                     Date.now() * 0.002;
 
+
                 const pulse =
-                    1 + Math.sin(time) * 0.1;
+                    1 +
+                    Math.sin(time) *
+                    0.1;
 
 
                 core.scale.set(
@@ -524,6 +677,7 @@
                     pulse,
                     pulse
                 );
+
 
                 innerCore.scale.set(
                     pulse * 0.8,
@@ -539,7 +693,9 @@
 
 
                 const intersects =
-                    raycaster.intersectObjects(points);
+                    raycaster.intersectObjects(
+                        points
+                    );
 
 
                 points.forEach(point => {
@@ -548,10 +704,13 @@
                         0xffffff
                     );
 
+
                     point.userData.hoverScale +=
-                        (1 -
-                            point.userData.hoverScale) *
-                        0.1;
+                        (
+                            1 -
+                            point.userData.hoverScale
+                        ) * 0.1;
+
 
                     point.position.x =
                         point.userData.originalPosition.x +
@@ -559,6 +718,7 @@
                             time +
                             point.position.y
                         ) * 0.1;
+
 
                     point.position.z =
                         point.userData.originalPosition.z +
@@ -575,12 +735,15 @@
                     const hovered =
                         intersects[0].object;
 
+
                     hovered.material.color.set(
                         0x00d1ff
                     );
 
+
                     hovered.userData.hoverScale =
                         2.5;
+
                 }
 
 
@@ -599,6 +762,7 @@
                     scene,
                     camera
                 );
+
             }
 
 
@@ -612,10 +776,14 @@
                     const newHeight =
                         container.clientHeight;
 
+
                     camera.aspect =
-                        newWidth / newHeight;
+                        newWidth /
+                        newHeight;
+
 
                     camera.updateProjectionMatrix();
+
 
                     renderer.setSize(
                         newWidth,
@@ -629,6 +797,7 @@
             animate();
 
         })();
+
     </script>
 
 </div>
@@ -638,439 +807,453 @@
 
 <!-- =====================================================
      CONTENT GRID
+     
+     This now sits close underneath the hero.
      ===================================================== -->
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
+<div class="content-grid grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
 
-<!-- =====================================================
+```
+<!-- =================================================
      PREDICTION FORM
-     ===================================================== -->
+     ================================================= -->
 
 <section class="lg:col-span-2 bg-surface-card rounded-2xl border border-border-subtle p-6 md:p-8 shadow-xl">
 
-```
-<div class="flex items-center gap-3 mb-8 border-b border-border-subtle border-primary/20 pb-6">
 
-    <span class="material-symbols-outlined text-primary">
-        data_usage
-    </span>
+    <div class="flex items-center gap-3 mb-8 border-b border-border-subtle border-primary/20 pb-6">
 
-    <!-- KEEP WHITE -->
-    <h2 class="text-2xl font-headline-md font-semibold text-white tracking-tight">
-        Emergency Call Characteristics
-    </h2>
-
-</div>
-
-
-<form class="flex flex-col gap-6" id="prediction-form">
-
-
-    <!-- TIME -->
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="hour">
-
-                Hour of Day (0–23)
-
-            </label>
-
-            <input
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="hour"
-                max="23"
-                min="0"
-                name="hour"
-                required
-                type="number"
-                value="14">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="day_of_week">
-
-                Day of Week
-
-            </label>
-
-            <select
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="day_of_week"
-                name="day_of_week"
-                required>
-
-                <option value="Monday">
-                    Monday
-                </option>
-
-                <option selected value="Tuesday">
-                    Tuesday
-                </option>
-
-                <option value="Wednesday">
-                    Wednesday
-                </option>
-
-                <option value="Thursday">
-                    Thursday
-                </option>
-
-                <option value="Friday">
-                    Friday
-                </option>
-
-                <option value="Saturday">
-                    Saturday
-                </option>
-
-                <option value="Sunday">
-                    Sunday
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <!-- PRIORITY + UNIT -->
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="priority">
-
-                Priority Level
-
-            </label>
-
-            <select
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="priority"
-                name="priority"
-                required>
-
-                <option value="1">
-                    Priority 1 (Emergency)
-                </option>
-
-                <option selected value="2">
-                    Priority 2 (Urgent)
-                </option>
-
-                <option value="3">
-                    Priority 3
-                </option>
-
-                <option value="E">
-                    Priority E
-                </option>
-
-                <option value="I">
-                    Priority I
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="unit_type">
-
-                Unit Type
-
-            </label>
-
-            <select
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="unit_type"
-                name="unit_type"
-                required>
-
-                <option selected value="MEDIC">
-                    MEDIC
-                </option>
-
-                <option value="PRIVATE">
-                    PRIVATE
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <!-- LOCATION -->
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="zipcode">
-
-                ZIP Code
-
-            </label>
-
-            <input
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="zipcode"
-                name="zipcode"
-                placeholder="e.g. 94107"
-                required
-                type="text"
-                value="94107">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="station_area">
-
-                Station Area
-
-            </label>
-
-            <input
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="station_area"
-                name="station_area"
-                placeholder="e.g. 01"
-                type="text"
-                value="01">
-
-        </div>
-
-    </div>
-
-
-    <!-- NEIGHBORHOOD + ALS -->
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-
-        <div class="form-group">
-
-            <label
-                class="form-label-styled font-semibold tracking-wide uppercase text-xs"
-                for="neighborhood">
-
-                Neighborhood
-
-            </label>
-
-            <input
-                class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
-                id="neighborhood"
-                name="neighborhood"
-                placeholder="e.g. South of Market"
-                type="text"
-                value="South of Market">
-
-        </div>
-
-
-        <div class="form-group checkbox-group flex items-center h-10 bg-surface-container-low/50 p-2 rounded-lg border border-outline-variant/30">
-
-            <label
-                class="flex items-center gap-3 cursor-pointer hover:text-primary transition-colors"
-                for="als_unit">
-
-                <input
-                    checked
-                    class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-card bg-surface-container"
-                    id="als_unit"
-                    name="als_unit"
-                    type="checkbox">
-
-                <span class="font-body-md text-white">
-                    Advanced Life Support (ALS) Unit
-                </span>
-
-            </label>
-
-        </div>
-
-    </div>
-
-
-    <!-- SUBMIT -->
-
-    <div class="mt-6 pt-6 border-t border-border-subtle">
-
-        <button
-            class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary font-headline-md font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-            id="submit-btn"
-            type="submit">
-
-            <span class="material-symbols-outlined">
-                analytics
-            </span>
-
-            Predict Response Time
-
-        </button>
-
-    </div>
-
-</form>
-```
-
-</section>
-
-<!-- =====================================================
-     SIDEBAR
-     ===================================================== -->
-
-<div class="flex flex-col gap-6">
-
-```
-<!-- RESPONSE TIME CARD -->
-
-<section
-    class="bg-primary-container text-on-primary-container rounded-2xl p-6 shadow-lg border border-primary-fixed-dim relative overflow-hidden"
-    id="result-card">
-
-
-    <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-
-
-    <div class="flex items-center gap-2 mb-4 relative z-10">
-
-        <span class="material-symbols-outlined text-on-primary-container">
-            timer
+        <span class="material-symbols-outlined text-primary">
+            data_usage
         </span>
 
-        <h2 class="result-heading font-headline-md tracking-tight">
-            Estimated Response Time
+
+        <!-- IMPORTANT:
+             This remains WHITE. -->
+
+        <h2 class="text-2xl font-headline-md font-semibold text-white tracking-tight">
+            Emergency Call Characteristics
         </h2>
 
     </div>
 
 
-    <div
-        class="result-display relative z-10 min-h-[140px] flex items-center justify-center bg-black/30 rounded-xl p-6 border border-white/10 tracking-tight"
-        id="result-display">
-
-        <span class="placeholder-text text-center">
-
-            Enter call details and click predict to see estimated time.
-
-        </span>
-
-    </div>
+    <form class="flex flex-col gap-6" id="prediction-form">
 
 
-    <div
-        class="error-message hidden mt-4 p-3 bg-error-container text-on-error-container rounded-lg text-sm font-body-md relative z-10"
-        id="error-message">
-    </div>
+        <!-- TIME -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="hour">
+
+                    Hour of Day (0–23)
+
+                </label>
+
+
+                <input
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="hour"
+                    max="23"
+                    min="0"
+                    name="hour"
+                    required
+                    type="number"
+                    value="14">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="day_of_week">
+
+                    Day of Week
+
+                </label>
+
+
+                <select
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="day_of_week"
+                    name="day_of_week"
+                    required>
+
+                    <option value="Monday">
+                        Monday
+                    </option>
+
+                    <option selected value="Tuesday">
+                        Tuesday
+                    </option>
+
+                    <option value="Wednesday">
+                        Wednesday
+                    </option>
+
+                    <option value="Thursday">
+                        Thursday
+                    </option>
+
+                    <option value="Friday">
+                        Friday
+                    </option>
+
+                    <option value="Saturday">
+                        Saturday
+                    </option>
+
+                    <option value="Sunday">
+                        Sunday
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRIORITY + UNIT -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="priority">
+
+                    Priority Level
+
+                </label>
+
+
+                <select
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="priority"
+                    name="priority"
+                    required>
+
+                    <option value="1">
+                        Priority 1 (Emergency)
+                    </option>
+
+                    <option selected value="2">
+                        Priority 2 (Urgent)
+                    </option>
+
+                    <option value="3">
+                        Priority 3
+                    </option>
+
+                    <option value="E">
+                        Priority E
+                    </option>
+
+                    <option value="I">
+                        Priority I
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="unit_type">
+
+                    Unit Type
+
+                </label>
+
+
+                <select
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="unit_type"
+                    name="unit_type"
+                    required>
+
+                    <option selected value="MEDIC">
+                        MEDIC
+                    </option>
+
+                    <option value="PRIVATE">
+                        PRIVATE
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="zipcode">
+
+                    ZIP Code
+
+                </label>
+
+
+                <input
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="zipcode"
+                    name="zipcode"
+                    placeholder="e.g. 94107"
+                    required
+                    type="text"
+                    value="94107">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="station_area">
+
+                    Station Area
+
+                </label>
+
+
+                <input
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="station_area"
+                    name="station_area"
+                    placeholder="e.g. 01"
+                    type="text"
+                    value="01">
+
+            </div>
+
+        </div>
+
+
+        <!-- NEIGHBORHOOD + ALS -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+
+            <div class="form-group">
+
+                <label
+                    class="form-label-styled font-semibold tracking-wide uppercase text-xs"
+                    for="neighborhood">
+
+                    Neighborhood
+
+                </label>
+
+
+                <input
+                    class="form-input-styled border-primary/30 focus:border-primary focus:ring-primary/50 shadow-inner"
+                    id="neighborhood"
+                    name="neighborhood"
+                    placeholder="e.g. South of Market"
+                    type="text"
+                    value="South of Market">
+
+            </div>
+
+
+            <div class="form-group checkbox-group flex items-center h-10 bg-surface-container-low/50 p-2 rounded-lg border border-outline-variant/30">
+
+                <label
+                    class="flex items-center gap-3 cursor-pointer hover:text-primary transition-colors"
+                    for="als_unit">
+
+                    <input
+                        checked
+                        class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-card bg-surface-container"
+                        id="als_unit"
+                        name="als_unit"
+                        type="checkbox">
+
+                    <span class="font-body-md text-white">
+                        Advanced Life Support (ALS) Unit
+                    </span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <div class="mt-6 pt-6 border-t border-border-subtle">
+
+            <button
+                class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary font-headline-md font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                id="submit-btn"
+                type="submit">
+
+                <span class="material-symbols-outlined">
+                    analytics
+                </span>
+
+                Predict Response Time
+
+            </button>
+
+        </div>
+
+    </form>
 
 </section>
 
 
-<!-- MODEL SPECIFICATIONS -->
+<!-- =================================================
+     SIDEBAR
+     ================================================= -->
 
-<section class="bg-surface-card rounded-2xl border border-border-subtle p-6">
-
-    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-border-subtle">
-
-        <span class="material-symbols-outlined text-white">
-            info
-        </span>
-
-        <h3 class="text-lg font-headline-md font-semibold text-white">
-            Model Specifications
-        </h3>
-
-    </div>
+<div class="flex flex-col gap-6">
 
 
-    <ul class="flex flex-col gap-4 font-body-md text-sm">
+    <!-- RESPONSE TIME -->
+
+    <section
+        class="bg-primary-container text-on-primary-container rounded-2xl p-6 shadow-lg border border-primary-fixed-dim relative overflow-hidden"
+        id="result-card">
 
 
-        <li class="flex flex-col gap-1">
+        <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none">
+        </div>
 
-            <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                Dataset Period
+
+        <div class="flex items-center gap-2 mb-4 relative z-10">
+
+            <span class="material-symbols-outlined text-on-primary-container">
+                timer
             </span>
 
-            <span class="text-white font-data-mono bg-surface-container px-2 py-1 rounded inline-block w-fit">
-                2023–2026
+
+            <h2 class="result-heading font-headline-md tracking-tight">
+                Estimated Response Time
+            </h2>
+
+        </div>
+
+
+        <div
+            class="result-display relative z-10 min-h-[140px] flex items-center justify-center bg-black/30 rounded-xl p-6 border border-white/10 tracking-tight"
+            id="result-display">
+
+            <span class="placeholder-text text-center">
+
+                Enter call details and click predict to see estimated time.
+
             </span>
 
-        </li>
+        </div>
 
 
-        <li class="flex flex-col gap-1">
+        <div
+            class="error-message hidden mt-4 p-3 bg-error-container text-on-error-container rounded-lg text-sm font-body-md relative z-10"
+            id="error-message">
+        </div>
 
-            <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                Training Records
+    </section>
+
+
+    <!-- MODEL SPECIFICATIONS -->
+
+    <section class="bg-surface-card rounded-2xl border border-border-subtle p-6">
+
+        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-border-subtle">
+
+            <span class="material-symbols-outlined text-white">
+                info
             </span>
 
-            <span class="text-white">
-                Historical emergency-response records
-            </span>
 
-        </li>
+            <h3 class="text-lg font-headline-md font-semibold text-white">
+                Model Specifications
+            </h3>
 
-
-        <li class="flex flex-col gap-1">
-
-            <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                Primary Metric
-            </span>
-
-            <span class="text-white">
-                Mean Absolute Error (MAE)
-            </span>
-
-        </li>
+        </div>
 
 
-        <li class="flex flex-col gap-1">
+        <ul class="flex flex-col gap-4 font-body-md text-sm">
 
-            <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
-                Model Architecture
-            </span>
+            <li class="flex flex-col gap-1">
 
-            <span class="text-primary font-data-mono text-sm break-all">
-                HistGradientBoostingRegressor
-            </span>
+                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+                    Dataset Period
+                </span>
 
-        </li>
+                <span class="text-white font-data-mono bg-surface-container px-2 py-1 rounded inline-block w-fit">
+                    2023–2026
+                </span>
+
+            </li>
 
 
-    </ul>
+            <li class="flex flex-col gap-1">
 
-</section>
-```
+                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+                    Training Records
+                </span>
+
+                <span class="text-white">
+                    Historical emergency-response records
+                </span>
+
+            </li>
+
+
+            <li class="flex flex-col gap-1">
+
+                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+                    Primary Metric
+                </span>
+
+                <span class="text-white">
+                    Mean Absolute Error (MAE)
+                </span>
+
+            </li>
+
+
+            <li class="flex flex-col gap-1">
+
+                <span class="text-white font-label-caps text-xs tracking-wider uppercase opacity-80">
+                    Model Architecture
+                </span>
+
+                <span class="text-primary font-data-mono text-sm break-all">
+                    HistGradientBoostingRegressor
+                </span>
+
+            </li>
+
+        </ul>
+
+    </section>
 
 </div>
+```
 
 </div>
 
@@ -1085,8 +1268,6 @@
 ```
 <div class="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
-
-    <!-- WHITE FOOTER LOGO + ICON -->
 
     <div class="footer-logo flex items-center gap-2 opacity-70">
 
