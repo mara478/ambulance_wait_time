@@ -7,6 +7,7 @@ generates response-time predictions.
 
 import os
 import joblib
+import pandas as pd
 
 
 # ============================================================
@@ -82,9 +83,30 @@ class PredictionService:
             )
 
         try:
-            prediction = self.model.predict(features)
+            # Convert dictionary input to DataFrame if needed
+            if isinstance(features, dict):
+                features_df = pd.DataFrame([features])
+            elif isinstance(features, pd.DataFrame):
+                features_df = features.copy()
+            else:
+                features_df = pd.DataFrame(features)
 
+            # Ensure priority column values are clean strings
+            if 'priority' in features_df.columns:
+                features_df['priority'] = features_df['priority'].astype(str).str.strip().str.upper()
+
+            # DEBUG LOGGING (Check VS Code Terminal Output)
+            print("\n================ DEBUG PREDICTION ================")
+            print(f"Incoming Priority: {features_df['priority'].iloc[0] if 'priority' in features_df.columns else 'N/A'}")
+            print("Full Feature Data:")
+            print(features_df.to_dict(orient='records')[0])
+
+            # Run prediction
+            prediction = self.model.predict(features_df)
             predicted_minutes = float(prediction[0])
+
+            print(f"Predicted Response Time: {predicted_minutes:.2f} minutes")
+            print("==================================================\n")
 
             return predicted_minutes
 
