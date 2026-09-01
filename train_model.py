@@ -5,6 +5,7 @@ This version:
 - Reads the 2023-2026 ambulance dataset.
 - Calculates response time from received_dttm -> response_dttm.
 - Removes invalid target values.
+- Standardizes priority levels and filters extreme outliers.
 - Uses only information available at call receipt.
 - Creates temporal, geographic, emergency, demand and historical features.
 - Calculates historical features using ONLY strictly earlier calls.
@@ -129,13 +130,14 @@ def create_target(df):
         ]
     ).copy()
 
-    # Remove negative and zero response times
+    # Filter out negative times and extreme outliers (>120 minutes)
     df = df[
-        df["response_time_minutes"] > 0
+        (df["response_time_minutes"] >= 0.5) & 
+        (df["response_time_minutes"] <= 120.0)
     ].copy()
 
     print(
-        f"Valid positive response-time records: "
+        f"Valid response-time records (0.5 - 120 mins): "
         f"{len(df):,}"
     )
 
@@ -213,13 +215,14 @@ def clean_features(df):
             .str.strip()
         )
 
-    # Emergency characteristics
+    # Emergency characteristics & Priority Standardization
 
     df["priority"] = (
         df["priority"]
         .astype("string")
         .fillna("UNKNOWN")
         .str.strip()
+        .str.upper()
     )
 
     df["original_priority"] = (
@@ -227,7 +230,20 @@ def clean_features(df):
         .astype("string")
         .fillna("UNKNOWN")
         .str.strip()
+        .str.upper()
     )
+
+    # Standardize priority codes to align with frontend logic:
+    # E -> Critical Emergency (Fastest)
+    # 3 -> High Urgency
+    # 2 -> Medium Urgency
+    # 1 -> Low Urgency
+    priority_map = {
+        'A': '1', 'B': '2', 'C': '3', 'D': 'E',
+        'I': 'UNKNOWN'  # Remove invalid 'I' labels
+    }
+    df["priority"] = df["priority"].replace(priority_map)
+    df["original_priority"] = df["original_priority"].replace(priority_map)
 
     df["unit_type"] = (
         df["unit_type"]
@@ -603,8 +619,6 @@ def train_and_evaluate():
     # Training:      2023-2025
     # Validation:    Jan-Jun 2026
     # Final testing: Jul-Aug 2026
-    #
-    # This is stricter than randomly splitting the data.
     # --------------------------------------------------------
 
     train_df = df[
